@@ -295,6 +295,27 @@ class MidiFile:
                 tmp[0] += pitch_var
                 self.tracks[i]['note_off'][j][1].data = tuple(tmp)
 
+    def invert(self):
+        new_pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
+        new_track_group = []
+        times = [j[0] for track in self.tracks for i in track.keys() for j in track[i] if len(j) != 0]
+        if times:
+            max_time = max(times)
+        else:
+            max_time = 0
+
+        for i, track in enumerate(self.tracks):
+            for j, evt in enumerate(track['note_on']):
+                tmp = list(evt[1].data)
+                tmp[0] = 127 - tmp[0]
+                self.tracks[i]['note_on'][j][1].data = tuple(tmp)
+
+            for j, evt in enumerate(track['note_off']):
+                tmp = list(evt[1].data)
+                tmp[0] = 127 - tmp[0]
+                self.tracks[i]['note_off'][j][1].data = tuple(tmp)
+
+
     def print_file(self, log_file):
         open(log_file, "w").write(repr(self.pattern))
 
@@ -304,13 +325,15 @@ if __name__ == "__main__":
     parser.add_argument("outfile", help="Reversed output midi file.")
     parser.add_argument("-l", "--log", action="store_true", help="Write log to files.")
     parser.add_argument("-r", "--reverse", action="store_true", help="Reverse midi file.")
+    parser.add_argument("-i", "--invert", action="store_true", help="Invert notes on pentagram.")
     parser.add_argument("-c", "--change_pitch", metavar='<pitch_var>', type=int, help="Change pitch of midi file. Argument is pitch change. E.g: -c 2.", default=0)
     args = parser.parse_args()
     log = args.log
     change_pitch = args.change_pitch
     reverse = args.reverse
+    invert = args.invert
 
-    if change_pitch == 0 and not reverse:
+    if change_pitch == 0 and not reverse and not invert:
         print("Please, introduce and option. Use -h to see a list of avalable options.")
 
     a = MidiFile()
@@ -320,6 +343,8 @@ if __name__ == "__main__":
 
     if reverse:
         a.revert()
+    if invert:
+        a.invert()
     if change_pitch != 0:
         a.change_pitch(change_pitch)
 
