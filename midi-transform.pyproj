@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{19e92532-f022-412c-a7c4-e9b6c67fff46}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>miditransform-gui.py</StartupFile>
+    <StartupFile>miditransform-gui.pyw</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -21,7 +21,7 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="miditransform-gui.py" />
+    <Compile Include="miditransform-gui.pyw" />
     <Compile Include="miditransform.py" />
     <Compile Include="midi\constants.py" />
     <Compile Include="midi\containers.py" />
