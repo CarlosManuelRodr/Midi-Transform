@@ -1,4 +1,14 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#Encoding: utf-8
+
+#========================================================================================
+# title           : midi-reverse-gui.pyw
+# description     : Graphical interface for miditransform.py
+# author          : CMRM.
+# usage           : Open midi file and apply transformation.
+# python_version  : 2.7
+# license         : Public domain.
+#========================================================================================
 
 import sys
 import pygame
@@ -8,6 +18,7 @@ import os
 from miditransform import *
 from PySide import QtCore, QtGui
 
+# UI generated code.
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -119,22 +130,30 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.fopen = ""
 
         # Start audio mixer.
-        freq = 44100    # audio CD quality
-        bitsize = -16   # unsigned 16 bit
-        channels = 2    # 1 is mono, 2 is stereo
-        buffer = 1024   # number of samples
+        freq = 44100
+        bitsize = -16
+        channels = 2
+        buffer = 1024
         pygame.mixer.init(freq, bitsize, channels, buffer)
 
-        self.setWindowIcon(QtGui.QIcon('Resources\\midi-transform-icon.png'))
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        # Manual adjustments.
+        self.setWindowIcon(QtGui.QIcon(os.path.join(base_path, 'resources', 'midi-transform-icon.png')))
         self.setMaximumSize(310, 310)
         self.ui.action_open.setShortcut("Ctrl+O")
         self.ui.action_save.setShortcut("Ctrl+S")
         self.ui.pitch_value_spin.setRange(-127, 127)
-        self.play_icon = QtGui.QIcon("Resources\\play.png")
-        self.stop_icon = QtGui.QIcon("Resources\\stop.png")
+        self.play_icon = QtGui.QIcon(os.path.join(base_path, "resources", "play.png"))
+        self.stop_icon = QtGui.QIcon(os.path.join(base_path, "resources", "stop.png"))
         self.ui.play_button.setIcon(self.play_icon)
 
     def transform(self, in_file, out_file):
+        # Apply transformation to midi file.
         a = MidiFile()
         a.open(in_file)
 
@@ -216,8 +235,10 @@ class ControlMainWindow(QtGui.QMainWindow):
         msgBox.exec_()
 
     def onPlay(self):
+        # Play preview.
         if self.fopen:
             if not pygame.mixer.music.get_busy():
+                # Transform to temp file and play.
                 temp_file = os.path.join(tempfile.gettempdir(), "temp.mid")
                 self.transform(self.fopen, temp_file)
                 t = threading.Thread(target=self.playMusic, args = (temp_file,))

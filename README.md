@@ -20,6 +20,8 @@ Requires
 ===========
 
 * [Python](http://www.python.org/download/) (2.6 or 2.7)
+* [PySide](http://qt-project.org/wiki/PySide) For the GUI version.
+* [PyGame](http://pygame.org) For the GUI version.
 
 License
 ===========
