@@ -37,10 +37,16 @@ class MidiFile:
         self.tracks = []
         if open_file:
             track_group = self.pattern = midi.read_midifile(read)
+            resolution = track_group.resolution
         else:
             track_group = read
 
+        total_times = []
+
         for track in track_group:
+            bpm = 120
+            time = 0
+
             # Clear dictionary values.
             for v in self.events.keys():
                 self.events[v] = []
@@ -67,6 +73,10 @@ class MidiFile:
                 elif isinstance(evt_type, midi.MarkerEvent):
                     self.events["marker"].append(evt_data)
                 elif isinstance(evt_type, midi.SetTempoEvent):
+                    if open_file:
+                        # Calculate elapsed time.
+                        time += 60*t / (bpm * resolution)
+                        bpm = event.get_bpm()
                     self.events["tempo"].append(evt_data)
                 elif isinstance(evt_type, midi.ControlChangeEvent):
                     self.events["control_change"].append(evt_data)
@@ -81,6 +91,11 @@ class MidiFile:
                 elif isinstance(evt_type, midi.TextMetaEvent):
                     self.events["text_meta"].append(evt_data)
             self.tracks.append(self.events.copy())
+            if open_file:
+                time += 60*t / (bpm * resolution)
+                total_times.append(time)
+        if open_file:
+            self.total_time = max(total_times)
 
     def save(self, midi_file, log=False):
         pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
@@ -315,6 +330,8 @@ class MidiFile:
                 tmp[0] = 127 - tmp[0]
                 self.tracks[i]['note_off'][j][1].data = tuple(tmp)
 
+    def get_length(self):
+        return self.total_time
 
     def print_file(self, log_file):
         open(log_file, "w").write(repr(self.pattern))

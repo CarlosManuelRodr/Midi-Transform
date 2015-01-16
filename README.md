@@ -9,6 +9,7 @@ Instructions
 Usage: python2 midi-transform.py [input file] [output file]
 Options:
   -l      , --log=<arg>                Write log to files.
+  -i      , --invert                   Invert notes on pentagram.
   -r      , --reverse                  Reverse midi file.
   -c <arg>, --change_pitch=<arg>       Change pitch of midi file. Argument is pitch change. E.g: -c 2.
   -h        --help                     Print usage and exit.

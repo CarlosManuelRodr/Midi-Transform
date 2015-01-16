@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19e92532-f022-412c-a7c4-e9b6c67fff46}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>miditransform-gui.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <InterpreterVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="miditransform-gui.py" />
+    <Compile Include="miditransform.py" />
+    <Compile Include="midi\constants.py" />
+    <Compile Include="midi\containers.py" />
+    <Compile Include="midi\events.py" />
+    <Compile Include="midi\fileio.py" />
+    <Compile Include="midi\sequencer.py" />
+    <Compile Include="midi\sequencer_alsa\sequencer.py" />
+    <Compile Include="midi\sequencer_alsa\__init__.py" />
+    <Compile Include="midi\sequencer_osx\cfstring-typemaps-example-1.0\setup.py" />
+    <Compile Include="midi\sequencer_osx\sequencer_osx.py" />
+    <Compile Include="midi\sequencer_osx\test.py" />
+    <Compile Include="midi\util.py" />
+    <Compile Include="midi\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="midi" />
+    <Folder Include="midi\sequencer_alsa" />
+    <Folder Include="midi\sequencer_osx" />
+    <Folder Include="midi\sequencer_osx\cfstring-typemaps-example-1.0" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
