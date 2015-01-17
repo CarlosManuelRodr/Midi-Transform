@@ -3,6 +3,13 @@ midi-transform
 
 Transform MIDI files using Python. Uses [python-midi](https://github.com/vishnubob/python-midi) to handle midi files.
 
+
+Download
+===========
+
+* [Precompiled for Windows](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
+
+
 Instructions
 ===========
 ```
