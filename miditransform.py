@@ -148,7 +148,6 @@ class MidiFile:
             open("Log.txt", "w").write(repr(pattern))
 
     def delay_event(self, track, new_track, event_type, max_time):
-        avoid = []
         event_times = [evt[0] for evt in track[event_type] if len(evt) != 0]
         if event_times:
             event_max_time = max(event_times)
@@ -157,20 +156,10 @@ class MidiFile:
 
         # Delay event or group of events.
         for i, evt in enumerate(track[event_type]):
-            if i not in avoid:
-                if evt[0] == event_max_time or i == len(track[event_type]) - 1:
-                    new_track.append((max_time, evt[1]))
-                else:
-                    group = []
-                    for j, evtj in enumerate(track[event_type]):
-                        if i != j and evt[0] == evtj[0]:
-                            group.append(j)
-                            if j == len(track[event_type]) - 1:
-                                new_track.append((max_time, evtj[1]))
-                            else:
-                                new_track.append((track[event_type][i+1][0], evtj[1]))
-                    avoid += group
-                    new_track.append((track[event_type][i+1][0], evt[1]))
+            if evt[0] == event_max_time or i == len(track[event_type]) - 1:
+                new_track.append((max_time, evt[1]))
+            else:
+                new_track.append((track[event_type][i+1][0], evt[1]))
 
     def revert(self):
         invertible_controllers = 64, 65, 66, 67, 68, 80, 81, 82, 83
@@ -188,8 +177,9 @@ class MidiFile:
             new_track = []
 
             # Change order of various events. E.g: 
-            # elayevt1 -> evt1 -> delayevt2 -> evt2. will be changed to: evt1 -> delayevt1 -> evt2 -> delayevt2. 
-            # So is easier to reverse.
+            # delayevt1 -> noninvertevt1 -> delayevt2 -> noninvertevt2. will be 
+            # changed to: noninvertevt1 -> delayevt1 -> noninvertevt2 -> delayevt2
+            # so is easier to reverse.
 
             self.delay_event(track, new_track, "track_name", max_time)
             self.delay_event(track, new_track, "tempo", max_time)
@@ -201,6 +191,9 @@ class MidiFile:
 
             # Doc: The Controller Event signals the change in a MIDI channels state.
             # Controller events might be in pairs or just alone. Check both cases.
+            # This inverts appeareance order. E.g:
+            # noninvertevt1start -> evt1 -> noninvertevt1end -> noninvertevt2start -> evt2 -> noninvertevt2end
+            # changes to: noninvertevt1end -> evt1 -> noninvertevt1start -> noninvertevt2end -> evt2 -> noninvertevt2start.
             for i, evt in enumerate(track['control_change']):
                 # First check if the controller is invertible (like pedals).
                 if evt[1].data[0] in invertible_controllers:
@@ -232,9 +225,12 @@ class MidiFile:
                         new_track.append((track['control_change'][i+1][0], evt[1]))
 
             if len(controllers) != 0:
-                     print("Warning: Track " + str(track_num) + ", " + str(len(controllers)) + " controller event/s unmatched.")
+                # The unmatched ones are probably at the end of the track.
+                print("Warning: Track " + str(track_num) + ", " + str(len(controllers)) + " controller event/s unmatched.")
+                for c in controllers:
+                    new_track.append((max_time, c))
 
-            # Reverse notes.
+            # Reverse notes (invert appearance order).
             for evt in track['note_on']:
                 # Notes on.
                 if evt[1].data[1] != 0:
@@ -288,9 +284,19 @@ class MidiFile:
                 new_track[i] = (t, evt[1])
             new_track_group.append(list(new_track))
 
+        # Find the time when the first note occurs.
+        noteon_times = [evt[0] for track in new_track_group for evt in track if isinstance(evt[1], midi.NoteOnEvent)]
+        if len(noteon_times) > 0:
+            min_noteon = min(noteon_times)
+            if min_noteon != 0:
+                for i, evt in enumerate(new_track):
+                    t = evt[0] - min_noteon
+                    if t > 0:
+                        new_track[i] = (t, evt[1])
         self.open(read=new_track_group, open_file=False)
 
     def change_pitch(self, pitch_var):
+        # Add pitch_var to every note value.
         new_pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
         new_track_group = []
         times = [j[0] for track in self.tracks for i in track.keys() for j in track[i] if len(j) != 0]
@@ -311,6 +317,7 @@ class MidiFile:
                 self.tracks[i]['note_off'][j][1].data = tuple(tmp)
 
     def invert(self):
+        # Change every note value to 127 - note value.
         new_pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
         new_track_group = []
         times = [j[0] for track in self.tracks for i in track.keys() for j in track[i] if len(j) != 0]

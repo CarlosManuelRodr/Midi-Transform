@@ -214,6 +214,8 @@ class ControlMainWindow(QtGui.QMainWindow):
 
     def onOpen(self):
         self.fopen, _ = QtGui.QFileDialog.getOpenFileName(self, "Open Midi file", "", "Midi File (*.mid)")
+        if pygame.mixer.music.get_busy():
+            self.stopPlay()
 
     def onSave(self):
         self.fsave, _ = QtGui.QFileDialog.getSaveFileName(self, "Save Midi file", "", "Midi File (*.mid)")
@@ -234,23 +236,29 @@ class ControlMainWindow(QtGui.QMainWindow):
         msgBox.setInformativeText("Author: cmrm\n\nWeb: https://github.com/cmrm/midi-transform")
         msgBox.exec_()
 
+    def startPlay(self):
+        # Transform to temp file and play.
+        temp_file = os.path.join(tempfile.gettempdir(), "temp.mid")
+        self.transform(self.fopen, temp_file)
+        t = threading.Thread(target=self.playMusic, args = (temp_file,))
+        t.start()
+        self.ui.play_button.setText("Stop")
+        self.ui.play_button.setIcon(self.stop_icon)
+        self.deactivateGui()
+
+    def stopPlay(self):
+        pygame.mixer.music.stop()
+        self.ui.play_button.setText("Play")
+        self.ui.play_button.setIcon(self.play_icon)
+        self.activateGui()
+
     def onPlay(self):
         # Play preview.
         if self.fopen:
             if not pygame.mixer.music.get_busy():
-                # Transform to temp file and play.
-                temp_file = os.path.join(tempfile.gettempdir(), "temp.mid")
-                self.transform(self.fopen, temp_file)
-                t = threading.Thread(target=self.playMusic, args = (temp_file,))
-                t.start()
-                self.ui.play_button.setText("Stop")
-                self.ui.play_button.setIcon(self.stop_icon)
-                self.deactivateGui()
+                self.startPlay()
             else:
-                pygame.mixer.music.stop()
-                self.ui.play_button.setText("Play")
-                self.ui.play_button.setIcon(self.play_icon)
-                self.activateGui()
+                self.stopPlay()
         else:
             msgBox = QtGui.QMessageBox()
             msgBox.setText("Open a file first.")
