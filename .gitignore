@@ -30,7 +30,6 @@
 # IDE #
 #######
 *.suo
-*.spec
 *.mid
  
 # OS generated files #
