@@ -8,6 +8,7 @@ Download
 ===========
 
 * [Precompiled for Windows](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
+* [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGQnhSekZMVGpRRlk/view?usp=sharing)
 
 
 Instructions

@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+#Encoding: utf-8
+
+#========================================================================================
+# title           : main.py
+# description     : Kivy GUI for android.
+# author          : CMRM.
+# usage           : Compile with buildozer.spec.
+# python_version  : 2.7
+# license         : Public domain.
+#========================================================================================
+
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -22,13 +34,16 @@ if _platform == "linux" or _platform == "linux2" or _platform == "win32" or _pla
     import pygame.mixer as mixer
     Config.set('graphics', 'width', '500')
     Config.set('graphics', 'height', '500')
+    on_android = False
 else:
     import android.mixer as mixer
+    on_android = True
 
 # Global.
 open_filename = ""
 file_loaded = False
 status_label = 0
+temp_dir = ""
 
 transformation_none_gui = 0
 transformation_invert_gui = 0
@@ -41,7 +56,7 @@ def show_popup(title, text):
     box.add_widget(Label(text=text))
     button = Button(text='Close', size_hint=(1, 0.3))
     box.add_widget(button)
-    popup = Popup(title=title, content=box, auto_dismiss=False, size_hint=(None, None), size=(300, 300))
+    popup = Popup(title=title, content=box, auto_dismiss=False, size_hint=(None, None), size=(370, 300))
     button.bind(on_press=popup.dismiss)
     popup.open()
 
@@ -53,6 +68,8 @@ def transform(out_file):
         transformation = "Invert"
     elif transformation_revert_gui.state == "down":
         transformation = "Revert"
+    else:
+        transformation = "None"
 
     if pitch_switch_gui:
         change_pitch = True
@@ -102,6 +119,9 @@ class MenuBar(FloatLayout):
         self._popup = Popup(title="Save file", content=content, size_hint=(0.9, 0.9))
         self._popup.open()
 
+    def about(self):
+        show_popup("Info", "MidiTransform\nAuthor: cmrm\nWeb: https://github.com/cmrm/midi-transform")
+
     def quit(self):
     	App.get_running_app().stop()
 
@@ -112,7 +132,7 @@ class MenuBar(FloatLayout):
         self.dismiss_popup()
         if open_filename.endswith('.mid'):
             file_loaded = True
-            set_status("File loaded.")
+            set_status("File loaded: " + filename[0])
         else:
             open_filename = ""
             show_popup("Warning", "You must select a midi file.")
@@ -137,23 +157,28 @@ class Root(BoxLayout):
     def is_playing(self):
         return mixer.music.get_busy()
 
+    def deactivate_gui(self, dt):
+        self.ids.play_button.text = "Stop"
+        self.ids.options_layout.disabled = True
+
+    def activate_gui(self, dt):
+        self.ids.play_button.text = "Play preview"
+        self.ids.options_layout.disabled = False
+
     def thread_play(self):
         global open_filename
-        temp_file = os.path.join(tempfile.gettempdir(), "temp.mid")
+        temp_file = os.path.join(temp_dir, "temp.mid")
         transform(temp_file)
         try:
             mixer.music.load(temp_file)
             mixer.music.play()
             mixer.music.set_volume(1.0)
-            self.ids.play_button.text = "Stop"
-            self.ids.options_layout.disabled = True
+            Clock.schedule_once(self.deactivate_gui)
 
             while self.is_playing():
                 time.sleep(0.5)
-                pass
 
-            self.ids.play_button.text = "Play preview"
-            self.ids.options_layout.disabled = False
+            Clock.schedule_once(self.activate_gui)
 
         except:
             Logger.info('Music: Error on play.')
@@ -167,8 +192,18 @@ class Root(BoxLayout):
         mixer.init(freq, bitsize, channels, buffer)
 
     def start_play(self):
-        t = threading.Thread(target=self.thread_play)
-        t.start()
+        if on_android:
+            global open_filename
+            temp_file = os.path.join(temp_dir, "temp.mid")
+            transform(temp_file)
+            try:
+                mixer.music.load(temp_file)
+                mixer.music.play()
+            except:
+                Logger.info('Music: Error on play.')
+        else:
+            t = threading.Thread(target=self.thread_play)
+            t.start()
 
     def stop_play(self):
         self.ids.play_button.text = "Play preview"
@@ -177,7 +212,6 @@ class Root(BoxLayout):
 
     def play_music(self):
         global file_loaded
-        #show_popup("Warning", "No file loaded")
         if not self.is_playing():
             if file_loaded:
                 Logger.info('Music: Starting to play.')
@@ -190,6 +224,17 @@ class Root(BoxLayout):
 
 class MainApp(App):
     def build(self):
+        # Config.
+        self._app_name = 'MidiTransform'
+        global temp_dir
+        global on_android
+        if on_android:
+            temp_dir = self.user_data_dir
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir)
+        else:
+            temp_dir = tempfile.gettempdir()
+
         global status_label
         global transformation_none_gui
         global transformation_invert_gui
@@ -208,6 +253,12 @@ class MainApp(App):
 
     def on_stop(self):
         self.root.stop_play()
+
+    def on_pause(self):
+        return True
+
+    def on_resume(self):
+        pass
 
 Factory.register('Root', cls=Root)
 Factory.register('LoadDialog', cls=LoadDialog)

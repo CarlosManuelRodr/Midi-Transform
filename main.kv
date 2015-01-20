@@ -20,6 +20,9 @@
                     text: 'Save'
                     on_release: root.show_save()
                 ActionButton:
+                    text: 'About'
+                    on_release: root.about()
+                ActionButton:
                     text: 'Quit'
                     on_release: root.quit()
 
@@ -96,8 +99,9 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserListView:
+        FileChooserIconView:
             id: filechooser
+            filters: ['*.mid']
 
         BoxLayout:
             size_hint_y: None
@@ -116,7 +120,7 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserListView:
+        FileChooserIconView:
             id: filechooser
             on_selection: text_input.text = self.selection and self.selection[0] or ''
 
