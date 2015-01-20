@@ -8,6 +8,7 @@ Download
 ===========
 
 * [Precompiled for Windows](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
+* [Linux binary](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
 * [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGQnhSekZMVGpRRlk/view?usp=sharing)
 
 
@@ -23,6 +24,7 @@ Options:
   -h        --help                     Print usage and exit.
 ```
 
+A Qt GUI is provided in miditransform-gui.pyw. Also it can be compiled for android using Kivy.
 
 Requires
 ===========
@@ -30,6 +32,7 @@ Requires
 * [Python](http://www.python.org/download/) (2.6 or 2.7)
 * [PySide](http://qt-project.org/wiki/PySide) For the GUI version.
 * [PyGame](http://pygame.org) For the GUI version.
+* [Kivy](http://kivy.org) For Android version.
 
 License
 ===========
