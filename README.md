@@ -12,6 +12,15 @@ Download
 * [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGQnhSekZMVGpRRlk/view?usp=sharing)
 
 
+Showcase
+===========
+
+Examples of the files produced by the script.
+
+* [Inverse Brahms Symphony No. 3 in F major, Op. 90. Mov. I](https://www.youtube.com/watch?v=kfrJyiVtBUI)
+* [Reverse Chopin Ballade No. 1 in G minor, Op. 23](https://www.youtube.com/watch?v=8sbFRNm7dDo)
+
+
 Instructions
 ===========
 ```
@@ -24,7 +33,7 @@ Options:
   -h        --help                     Print usage and exit.
 ```
 
-A Qt GUI is provided in miditransform-gui.pyw. Also it can be compiled for android using Kivy.
+A Qt GUI is provided in "miditransform-gui.pyw". It can also be compiled for android using Kivy and Buildozer.
 
 Requires
 ===========
