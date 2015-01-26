@@ -9,7 +9,7 @@ Download
 
 * [Precompiled for Windows](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
 * [Linux binary](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
-* [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGQnhSekZMVGpRRlk/view?usp=sharing)
+* [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGSHdTTXQzVkxwclk/view?usp=sharing)
 
 
 Showcase
@@ -24,12 +24,12 @@ Examples of the files produced by the script.
 Instructions
 ===========
 ```
-Usage: python2 midi-transform.py [input file] [output file]
+Usage: python2 miditransform.py [input file] [output file]
 Options:
   -l      , --log=<arg>                Write log to files.
   -i      , --invert                   Invert notes on pentagram.
   -r      , --reverse                  Reverse midi file.
-  -c <arg>, --change_pitch=<arg>       Change pitch of midi file. Argument is pitch change. E.g: -c 2.
+  -c <arg>, --change_pitch=<arg>       Change pitch of midi file. The argument is the pitch change. E.g: -c 2.
   -h        --help                     Print usage and exit.
 ```
 

@@ -99,7 +99,7 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserIconView:
+        FileChooserListView:
             id: filechooser
             filters: ['*.mid']
 
@@ -120,7 +120,7 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserIconView:
+        FileChooserListView:
             id: filechooser
             on_selection: text_input.text = self.selection and self.selection[0] or ''
 

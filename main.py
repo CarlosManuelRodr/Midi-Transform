@@ -23,8 +23,6 @@ from kivy.config import Config
 from kivy.clock import Clock
 import os
 import tempfile
-import threading
-import time
 from miditransform import *
 
 # PyGame support midi on Windows, OSX and Linux.
@@ -71,7 +69,7 @@ def transform(out_file):
     else:
         transformation = "None"
 
-    if pitch_switch_gui:
+    if pitch_switch_gui.active:
         change_pitch = True
         pitch_change = int(pitch_slider_gui.value)
     else:
