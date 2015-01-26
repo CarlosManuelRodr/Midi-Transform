@@ -42,3 +42,10 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Build directories #
+#####################
+bin/
+dist/
+build/
+.buildozer/

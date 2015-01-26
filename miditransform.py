@@ -2,10 +2,10 @@
 #Encoding: utf-8
 
 #========================================================================================
-# title           : midi-reverse.py
-# description     : Reverse midi file.
+# title           : miditransform.py
+# description     : Transform midi file.
 # author          : CMRM.
-# usage           : python midi-reverse.py [input file] [output file]
+# usage           : python miditransform.py [input file] [output file]
 # python_version  : 2.7
 # license         : Public domain.
 #========================================================================================
@@ -15,6 +15,8 @@ import midi
 import sys
 import copy
 import argparse
+
+__version__ = "1.0.0"
 
 class MidiFile:
     def __init__(self):

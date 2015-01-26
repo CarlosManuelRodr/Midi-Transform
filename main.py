@@ -96,14 +96,26 @@ def set_status(text):
         status_label.text = text
 
 class LoadDialog(FloatLayout):
-    load = ObjectProperty(None)
-    cancel = ObjectProperty(None)
+    def __init__(self, load, cancel):
+        super(LoadDialog, self ).__init__()
+        self.load = load
+        self.cancel = cancel
+        if on_android:
+            self.ids.filechooser.rootpath = "/sdcard/"
+        else:
+            self.ids.filechooser.rootpath = "/home/"
 
 
 class SaveDialog(FloatLayout):
-    save = ObjectProperty(None)
-    text_input = ObjectProperty(None)
-    cancel = ObjectProperty(None)
+    def __init__(self, save, cancel):
+        super(SaveDialog, self ).__init__()
+        self.save = save
+        self.text_input = ObjectProperty(None)
+        self.cancel = cancel
+        if on_android:
+            self.ids.filechooser.rootpath = "/sdcard/"
+        else:
+            self.ids.filechooser.rootpath = "/home/"
 
 class MenuBar(FloatLayout):
     def dismiss_popup(self):
@@ -115,15 +127,19 @@ class MenuBar(FloatLayout):
         self._popup.open()
 
     def show_save(self):
-        content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
-        self._popup = Popup(title="Save file", content=content, size_hint=(0.9, 0.9))
-        self._popup.open()
+        global open_filename
+        if open_filename:
+            content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
+            self._popup = Popup(title="Save file", content=content, size_hint=(0.9, 0.9))
+            self._popup.open()
+        else:
+            show_popup("Warning", "No file loaded")
 
     def about(self):
         show_popup("Info", "MidiTransform\nAuthor: cmrm\nWeb: https://github.com/cmrm/midi-transform")
 
     def quit(self):
-    	App.get_running_app().stop()
+        App.get_running_app().stop()
 
     def load(self, path, filename):
         global open_filename
@@ -138,16 +154,13 @@ class MenuBar(FloatLayout):
             show_popup("Warning", "You must select a midi file.")
 
     def save(self, path, filename):
-        if open_filename:
-            save_filename = os.path.join(path, filename)
-            self.dismiss_popup()
-            if not save_filename.endswith('.mid'):
-                save_filename += ".mid"
+        save_filename = os.path.join(path, filename)
+        self.dismiss_popup()
+        if not save_filename.endswith('.mid'):
+            save_filename += ".mid"
 
-            transform(save_filename)
-            show_popup("Success", "File saved successfully.")
-        else:
-            show_popup("Warning", "No file loaded")
+        transform(save_filename)
+        show_popup("Success", "File saved successfully.")
 
 class Root(BoxLayout):
     def reset_pitch_slider(self):
@@ -165,24 +178,6 @@ class Root(BoxLayout):
         self.ids.play_button.text = "Play preview"
         self.ids.options_layout.disabled = False
 
-    def thread_play(self):
-        global open_filename
-        temp_file = os.path.join(temp_dir, "temp.mid")
-        transform(temp_file)
-        try:
-            mixer.music.load(temp_file)
-            mixer.music.play()
-            mixer.music.set_volume(1.0)
-            Clock.schedule_once(self.deactivate_gui)
-
-            while self.is_playing():
-                time.sleep(0.5)
-
-            Clock.schedule_once(self.activate_gui)
-
-        except:
-            Logger.info('Music: Error on play.')
-
     def start_midi_mixer(self):
         # Start audio mixer.
         freq = 44100
@@ -191,19 +186,23 @@ class Root(BoxLayout):
         buffer = 1024
         mixer.init(freq, bitsize, channels, buffer)
 
+    def check_if_finished(self, dt):
+        if not self.is_playing():
+            Clock.schedule_once(self.activate_gui)
+            Clock.unschedule(self.check_if_finished)
+
     def start_play(self):
-        if on_android:
-            global open_filename
-            temp_file = os.path.join(temp_dir, "temp.mid")
-            transform(temp_file)
-            try:
-                mixer.music.load(temp_file)
-                mixer.music.play()
-            except:
-                Logger.info('Music: Error on play.')
-        else:
-            t = threading.Thread(target=self.thread_play)
-            t.start()
+        global open_filename
+        temp_file = os.path.join(temp_dir, "temp.mid")
+        transform(temp_file)
+        try:
+            mixer.music.load(temp_file)
+            mixer.music.play()
+            mixer.music.set_volume(1.0)
+            Clock.schedule_once(self.deactivate_gui)
+            Clock.schedule_interval(self.check_if_finished, 1 / 30.)
+        except:
+            Logger.info('Music: Error on play.')
 
     def stop_play(self):
         self.ids.play_button.text = "Play preview"
@@ -228,6 +227,8 @@ class MainApp(App):
         self._app_name = 'MidiTransform'
         global temp_dir
         global on_android
+
+        # Create the app directories on Android.
         if on_android:
             temp_dir = self.user_data_dir
             if not os.path.exists(temp_dir):
@@ -235,12 +236,14 @@ class MainApp(App):
         else:
             temp_dir = tempfile.gettempdir()
 
+        # Set the global values for some controllers.
         global status_label
         global transformation_none_gui
         global transformation_invert_gui
         global transformation_revert_gui
         global pitch_switch_gui
         global pitch_slider_gui
+        self.icon = "resources/midi-transform-icon.png"
         self.root = Root()
         self.root.start_midi_mixer()
         status_label = self.root.ids.status_label

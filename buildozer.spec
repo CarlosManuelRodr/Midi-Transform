@@ -25,11 +25,11 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-#version.regex = __version__ = ['"](.*)['"]
-#version.filename = %(source.dir)s/main.py
+version.regex = __version__ = ['"](.*)['"]
+version.filename = %(source.dir)s/miditransform.py
 
 # (str) Application versioning (method 2)
-version = 1.0.0
+#version = 1.0.0
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy

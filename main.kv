@@ -71,8 +71,8 @@
                     text: "Change value"
                 Slider:
                     id: pitch_slider
-                    min: -64
-                    max: 64
+                    min: -32
+                    max: 32
                     on_touch_move: sliderval_label.text = str(int(pitch_slider.value))
             BoxLayout:
                 Button:
