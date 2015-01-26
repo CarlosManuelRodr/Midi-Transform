@@ -7,8 +7,8 @@ Transform MIDI files using Python. Uses [python-midi](https://github.com/vishnub
 Download
 ===========
 
-* [Windows](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
-* [Linux binary](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
+* [Windows build](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
+* [Linux build](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
 * [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGSHdTTXQzVkxwclk/view?usp=sharing)
 
 
