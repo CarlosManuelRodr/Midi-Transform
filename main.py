@@ -142,23 +142,29 @@ class MenuBar(FloatLayout):
     def load(self, path, filename):
         global open_filename
         global file_loaded
-        open_filename = os.path.join(path, filename[0]).encode('utf-8')
-        self.dismiss_popup()
-        if open_filename.endswith('.mid'):
-            file_loaded = True
-            set_status("File loaded: " + filename[0])
-        else:
-            open_filename = ""
-            show_popup("Warning", "You must select a midi file.")
+        try:
+            open_filename = os.path.join(path, filename[0]).encode('utf-8')
+            self.dismiss_popup()
+            if open_filename.endswith('.mid'):
+                file_loaded = True
+                set_status("File loaded: " + filename[0])
+            else:
+                open_filename = ""
+                show_popup("Warning", "You must select a midi file.")
+        except:
+            show_popup("Warning", "Invalid file.")
 
     def save(self, path, filename):
-        save_filename = os.path.join(path, filename)
-        self.dismiss_popup()
-        if not save_filename.endswith('.mid'):
-            save_filename += ".mid"
+        try:
+            save_filename = os.path.join(path, filename)
+            self.dismiss_popup()
+            if not save_filename.endswith('.mid'):
+                save_filename += ".mid"
 
-        transform(save_filename)
-        show_popup("Success", "File saved successfully.")
+            transform(save_filename)
+            show_popup("Success", "File saved successfully.")
+        except:
+            show_popup("Warning", "Invalid file.")
 
 class Root(BoxLayout):
     def reset_pitch_slider(self):

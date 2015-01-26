@@ -28,8 +28,9 @@ Usage: python2 miditransform.py [input file] [output file]
 Options:
   -l      , --log=<arg>                Write log to files.
   -i      , --invert                   Invert notes on pentagram.
-  -r      , --reverse                  Reverse midi file.
+  -r      , --reverse                  Reverse midi file (play backward).
   -c <arg>, --change_pitch=<arg>       Change pitch of midi file. The argument is the pitch change. E.g: -c 2.
+  -t      , --test                     Test similarity of files after transformations.
   -h        --help                     Print usage and exit.
 ```
 
@@ -39,8 +40,8 @@ Requires
 ===========
 
 * [Python](http://www.python.org/download/) (2.6 or 2.7)
-* [PySide](http://qt-project.org/wiki/PySide) For the GUI version.
-* [PyGame](http://pygame.org) For the GUI version.
+* [PySide](http://qt-project.org/wiki/PySide) For the Qt GUI version.
+* [PyGame](http://pygame.org) For the Qt GUI version.
 * [Kivy](http://kivy.org) For Android version.
 
 License

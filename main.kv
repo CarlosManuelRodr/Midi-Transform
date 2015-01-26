@@ -37,6 +37,7 @@
         id: options_layout
         orientation: 'horizontal'
         BoxLayout:
+            size_hint: (0.7, 1.0)
             spacing: 1
             orientation: 'vertical'
             Label:
@@ -56,6 +57,7 @@
                 text: "Revert"
                 group: "transformation"
         BoxLayout:
+            size_hint: (1.2, 1.0)
             orientation: 'vertical'
             id: pitch_layout
             Label:
@@ -91,6 +93,7 @@
         Label:
             size_hint_y: 0.25
             id: status_label
+            font_size: '12sp'
             text: "Status: File not loaded."
 
 

@@ -14,9 +14,8 @@
 import midi
 import sys
 import copy
-import argparse
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 class MidiFile:
     def __init__(self):
@@ -164,7 +163,7 @@ class MidiFile:
                 new_track.append((track[event_type][i+1][0], evt[1]))
 
     def revert(self):
-        invertible_controllers = 64, 65, 66, 67, 68, 80, 81, 82, 83
+        invertible_controllers = 64, 65, 66, 67, 68, 69
         new_pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
         new_track_group = []
         times = [j[0] for track in self.tracks for i in track.keys() for j in track[i] if len(j) != 0]
@@ -339,6 +338,22 @@ class MidiFile:
                 tmp[0] = 127 - tmp[0]
                 self.tracks[i]['note_off'][j][1].data = tuple(tmp)
 
+    def compare(self, midifile):
+        total = 0.0
+        match = 0.0
+        for i, track in enumerate(self.tracks):
+            for key in track.keys():
+                for j, event in enumerate(track[key]):
+                    try:
+                        if event == midifile.tracks[i][key][j]:
+                            match += 1.0
+                        total += 1.0
+                    except:
+                        pass
+
+        percent = 100.0*match/total
+        print("Result: " + "%.2f" % percent + " % match.")
+
     def get_length(self):
         return self.total_time
 
@@ -346,6 +361,7 @@ class MidiFile:
         open(log_file, "w").write(repr(self.pattern))
 
 if __name__ == "__main__":
+    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("inputfile", help="Input midi file.")
     parser.add_argument("outfile", help="Reversed output midi file.")
@@ -353,13 +369,15 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--reverse", action="store_true", help="Reverse midi file.")
     parser.add_argument("-i", "--invert", action="store_true", help="Invert notes on pentagram.")
     parser.add_argument("-c", "--change_pitch", metavar='<pitch_var>', type=int, help="Change pitch of midi file. Argument is pitch change. E.g: -c 2.", default=0)
+    parser.add_argument("-t", "--test", action="store_true", help="Test effectivity.")
     args = parser.parse_args()
     log = args.log
     change_pitch = args.change_pitch
     reverse = args.reverse
     invert = args.invert
+    test = args.test
 
-    if change_pitch == 0 and not reverse and not invert:
+    if change_pitch == 0 and not reverse and not invert and not test:
         print("Please, introduce and option. Use -h to see a list of avalable options.")
 
     a = MidiFile()
@@ -373,6 +391,27 @@ if __name__ == "__main__":
         a.invert()
     if change_pitch != 0:
         a.change_pitch(change_pitch)
+    if test:
+        # Test revert.
+        print("Test: Revert.")
+        orig = copy.copy(a)
+        a.revert()
+        a.revert()
+        orig.compare(a)
+
+        # Test invert.
+        print("Test: Invert.")
+        orig = copy.copy(a)
+        a.invert()
+        a.invert()
+        orig.compare(a)
+
+        # Test change pitch.
+        print("Test: Change pitch.")
+        orig = copy.copy(a)
+        a.change_pitch(1)
+        a.change_pitch(-1)
+        orig.compare(a)
 
     a.save(args.outfile, log)
     print("Done.")
