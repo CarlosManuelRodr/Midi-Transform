@@ -15,7 +15,7 @@ import midi
 import sys
 import copy
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 class MidiFile:
     def __init__(self):
@@ -162,10 +162,12 @@ class MidiFile:
             else:
                 new_track.append((track[event_type][i+1][0], evt[1]))
 
-    def revert(self):
+    def revert(self, cut_silence = True):
         invertible_controllers = 64, 65, 66, 67, 68, 69
         new_pattern = midi.Pattern(resolution=self.pattern.resolution, format=self.pattern.format)
         new_track_group = []
+
+        # Get the time value of the last event.
         times = [j[0] for track in self.tracks for i in track.keys() for j in track[i] if len(j) != 0]
         if times:
             max_time = max(times)
@@ -180,7 +182,7 @@ class MidiFile:
             # Change order of various events. E.g: 
             # delayevt1 -> noninvertevt1 -> delayevt2 -> noninvertevt2. will be 
             # changed to: noninvertevt1 -> delayevt1 -> noninvertevt2 -> delayevt2
-            # so is easier to reverse.
+            # so is easier to revert.
 
             self.delay_event(track, new_track, "track_name", max_time)
             self.delay_event(track, new_track, "tempo", max_time)
@@ -231,7 +233,7 @@ class MidiFile:
                 for c in controllers:
                     new_track.append((max_time, c))
 
-            # Reverse notes (invert appearance order).
+            # Revert notes (invert appearance order).
             for evt in track['note_on']:
                 # Notes on.
                 if evt[1].data[1] != 0:
@@ -285,15 +287,18 @@ class MidiFile:
                 new_track[i] = (t, evt[1])
             new_track_group.append(list(new_track))
 
-        # Find the time when the first note occurs.
-        noteon_times = [evt[0] for track in new_track_group for evt in track if isinstance(evt[1], midi.NoteOnEvent)]
-        if len(noteon_times) > 0:
-            min_noteon = min(noteon_times)
-            if min_noteon != 0:
-                for i, evt in enumerate(new_track):
-                    t = evt[0] - min_noteon
-                    if t > 0:
-                        new_track[i] = (t, evt[1])
+        # Find the time when the first note occurs and cut the silence between.
+        if cut_silence:
+            noteon_times = [evt[0] for track in new_track_group for evt in track if isinstance(evt[1], midi.NoteOnEvent)]
+            if len(noteon_times) > 0:
+                min_noteon = min(noteon_times)
+                if min_noteon != 0:
+                    for i, track in enumerate(new_track_group):
+                        for j, evt in enumerate(track):
+                            t = evt[0] - min_noteon
+                            if t >= 0:
+                                new_track_group[i][j] = (t, evt[1])
+
         self.open(read=new_track_group, open_file=False)
 
     def change_pitch(self, pitch_var):
@@ -339,6 +344,7 @@ class MidiFile:
                 self.tracks[i]['note_off'][j][1].data = tuple(tmp)
 
     def compare(self, midifile):
+        # Check how many event coincide perfectly.
         total = 0.0
         match = 0.0
         for i, track in enumerate(self.tracks):
@@ -351,10 +357,14 @@ class MidiFile:
                     except:
                         pass
 
-        percent = 100.0*match/total
-        print("Result: " + "%.2f" % percent + " % match.")
+        if total != 0.0:
+            percent = 100.0*match/total
+            print("Result: " + "%.2f" % percent + " % match.")
+        else:
+            print("No events to match.")
 
     def get_length(self):
+        # Return total playing time in seconds.
         return self.total_time
 
     def print_file(self, log_file):
@@ -364,20 +374,20 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("inputfile", help="Input midi file.")
-    parser.add_argument("outfile", help="Reversed output midi file.")
+    parser.add_argument("outfile", help="Output midi file.")
     parser.add_argument("-l", "--log", action="store_true", help="Write log to files.")
-    parser.add_argument("-r", "--reverse", action="store_true", help="Reverse midi file.")
+    parser.add_argument("-r", "--revert", action="store_true", help="Revert midi file.")
     parser.add_argument("-i", "--invert", action="store_true", help="Invert notes on pentagram.")
     parser.add_argument("-c", "--change_pitch", metavar='<pitch_var>', type=int, help="Change pitch of midi file. Argument is pitch change. E.g: -c 2.", default=0)
     parser.add_argument("-t", "--test", action="store_true", help="Test effectivity.")
     args = parser.parse_args()
     log = args.log
     change_pitch = args.change_pitch
-    reverse = args.reverse
+    revert = args.revert
     invert = args.invert
     test = args.test
 
-    if change_pitch == 0 and not reverse and not invert and not test:
+    if change_pitch == 0 and not revert and not invert and not test:
         print("Please, introduce and option. Use -h to see a list of avalable options.")
 
     a = MidiFile()
@@ -385,7 +395,7 @@ if __name__ == "__main__":
     if log:
         a.print_file("Original.txt")
 
-    if reverse:
+    if revert:
         a.revert()
     if invert:
         a.invert()
@@ -395,8 +405,8 @@ if __name__ == "__main__":
         # Test revert.
         print("Test: Revert.")
         orig = copy.copy(a)
-        a.revert()
-        a.revert()
+        a.revert(cut_silence = False)
+        a.revert(cut_silence = False)
         orig.compare(a)
 
         # Test invert.

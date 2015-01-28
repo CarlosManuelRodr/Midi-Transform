@@ -2,7 +2,7 @@
 #Encoding: utf-8
 
 #========================================================================================
-# title           : midi-reverse-gui.pyw
+# title           : miditransform-gui.pyw
 # description     : Graphical interface for miditransform.py
 # author          : CMRM.
 # usage           : Open midi file and apply transformation.
@@ -137,7 +137,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         pygame.mixer.init(freq, bitsize, channels, buffer)
 
         try:
-            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            # PyInstaller creates a temp folder and stores path in _MEIPASS.
             base_path = sys._MEIPASS
         except Exception:
             base_path = os.path.abspath(".")
