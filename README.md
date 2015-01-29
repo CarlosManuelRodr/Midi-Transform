@@ -8,9 +8,9 @@ Download
 
 These are builds with graphical user interface. To use it by command line clone the repository.
 
-* [Windows build](https://drive.google.com/file/d/0B3A4M1pvdmsGN0pxYXFBaGN5Ums/view?usp=sharing)
-* [Linux build](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
-* [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGSHdTTXQzVkxwclk/view?usp=sharing)
+* [Windows build](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.exe)
+* [Linux build](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.tar.gz)
+* [Android APK](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/MidiTransform-1.0.2.apk)
 
 Screenshots
 ===========
