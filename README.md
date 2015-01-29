@@ -8,9 +8,15 @@ Download
 
 These are builds with graphical user interface. To use it by command line clone the repository.
 
-* [Windows build](https://docs.google.com/file/d/0B3A4M1pvdmsGRDB3NVBmbTR5WEE)
+* [Windows build](https://drive.google.com/file/d/0B3A4M1pvdmsGN0pxYXFBaGN5Ums/view?usp=sharing)
 * [Linux build](https://drive.google.com/file/d/0B3A4M1pvdmsGZEFOT21mTVpveUE/view?usp=sharing)
 * [Android APK](https://drive.google.com/file/d/0B3A4M1pvdmsGSHdTTXQzVkxwclk/view?usp=sharing)
+
+Screenshots
+===========
+![Windows](extra/qt_screenshot.png?raw=true "Windows") 
+![Android](extra/android_screenshot.png?raw=true "Android")
+
 
 Transformations
 ===============
@@ -35,7 +41,7 @@ Showcase
 Examples of the files produced by the script.
 
 * [Inverse Brahms Symphony No. 3 in F major, Op. 90. Mov. I](https://www.youtube.com/watch?v=kfrJyiVtBUI)
-* [Reverse Chopin Ballade No. 1 in G minor, Op. 23](https://www.youtube.com/watch?v=8sbFRNm7dDo)
+* [Reverse Chopin Ballade No. 1 in G minor, Op. 23](https://www.youtube.com/watch?v=fBDhxt-4A1Y)
 
 
 Instructions
