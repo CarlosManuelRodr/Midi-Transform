@@ -1,7 +1,11 @@
 Midi-Transform
 ============
 
-Transform MIDI files using Python. The transformations available are: Revert, Invert and Change pitch.
+Ever wondered how some musical piece would sound if played backwards? What would happen if you would play that piece with your sheet upside down? Midi-Transform lets you make this transformations to MIDI files. 
+
+The transformations available are: Revert, Invert and Change pitch.
+
+[Project page](http://cmrm.github.io/Midi-Transform/)
 
 Download
 ===========
