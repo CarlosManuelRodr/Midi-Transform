@@ -5,16 +5,15 @@ Ever wondered how some musical piece would sound if played backwards? What would
 
 The transformations available are: Revert, Invert and Change pitch.
 
-[Project page](http://cmrm.github.io/Midi-Transform/)
 
 Download
 ===========
 
 These are builds with graphical user interface. To use it by command line clone the repository.
 
-* [Windows build](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.exe)
-* [Linux build](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.tar.gz)
-* [Android APK](https://github.com/cmrm/midi-transform/releases/download/v1.0.2/MidiTransform-1.0.2.apk)
+* [Windows build](https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.exe)
+* [Linux build](https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.tar.gz)
+* [Android APK](https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/MidiTransform-1.0.2.apk)
 
 Screenshots
 ===========
