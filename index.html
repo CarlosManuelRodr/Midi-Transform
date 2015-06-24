@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Midi-transform by CarlosManuelRodr</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Midi-transform</h1>
+        <h2>Change pitch, reverse and invert Midi files.</h2>
+        <a href="https://github.com/CarlosManuelRodr/Midi-Transform" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="midi-transform" class="anchor" href="#midi-transform" aria-hidden="true"><span class="octicon octicon-link"></span></a>Midi-Transform</h1>
+
+<p>Ever wondered how some musical piece would sound if played backwards? What would happen if you would play that piece with your sheet upside down? Midi-Transform lets you make this transformations to MIDI files. </p>
+
+<p>The transformations available are: Revert, Invert and Change pitch.</p>
+
+<h1>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h1>
+
+<p>These are builds with graphical user interface. To use it by command line clone the repository.</p>
+
+<ul>
+<li><a href="https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.exe">Windows build</a></li>
+<li><a href="https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/miditransform-gui_v1.0.2.tar.gz">Linux build</a></li>
+<li><a href="https://github.com/CarlosManuelRodr/Midi-Transform/releases/download/v1.0.2/MidiTransform-1.0.2.apk">Android APK</a></li>
+</ul>
+
+<h1>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h1>
+
+<p><img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/qt_screenshot.png?raw=true" alt="Windows" title="Windows"> 
+<img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/qt_linux_screenshot.png?raw=true" alt="Linux" title="Linux"> </p>
+
+<p><img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/android_screenshot.png?raw=true" alt="Android" title="Android"></p>
+
+<h1>
+<a id="transformations" class="anchor" href="#transformations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transformations</h1>
+
+<h4>
+<a id="revert" class="anchor" href="#revert" aria-hidden="true"><span class="octicon octicon-link"></span></a>Revert</h4>
+
+<p>Revert note order. This transform the MIDI to play backwards.</p>
+
+<p><img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/RevertTransform.png?raw=true" alt="Revert example" title="Revert example"></p>
+
+<h4>
+<a id="invert" class="anchor" href="#invert" aria-hidden="true"><span class="octicon octicon-link"></span></a>Invert</h4>
+
+<p>Invert the notes like in a mirror. In MIDI every note has a numerical value. For example, C5, G4, B4 and E5 have numeric values of 72, 67, 71 and 76 respectively. MIDI files can have note values ranging from 0 to 127, so the inversion is done by changing the values to: note_value = 127 - note_value. The new values will be 55, 60, 56 and 51 which correspond to G3, C4, G#3 and D#3. This transformation has the proporty that alters the chord structure from major to minor and viceversa.</p>
+
+<p><img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/InvertTransform.png?raw=true" alt="Invert example" title="Invert example"></p>
+
+<h4>
+<a id="pitch-change" class="anchor" href="#pitch-change" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pitch change</h4>
+
+<p>Change pitch of every note. Works by adding or sustracting the pitch change to the note values.</p>
+
+<p><img src="https://github.com/CarlosManuelRodr/Midi-Transform/blob/master/extra/PitchTransform.png?raw=true" alt="Pitch change example" title="Pitch change example"></p>
+
+<h1>
+<a id="showcase" class="anchor" href="#showcase" aria-hidden="true"><span class="octicon octicon-link"></span></a>Showcase</h1>
+
+<p>Examples of the files produced by the script.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=kfrJyiVtBUI">Inverse Brahms Symphony No. 3 in F major, Op. 90. Mov. I</a></li>
+<li><a href="https://www.youtube.com/watch?v=fBDhxt-4A1Y">Reverse Chopin Ballade No. 1 in G minor, Op. 23</a></li>
+</ul>
+
+<h1>
+<a id="instructions" class="anchor" href="#instructions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instructions</h1>
+
+<p>To use it by command line.</p>
+
+<pre><code>Usage: python2 miditransform.py [input file] [output file]
+Options:
+  -l      , --log                      Write log to files.
+  -i      , --invert                   Invert notes on pentagram.
+  -r      , --revert                   Revert midi file (play backward).
+  -c &lt;arg&gt;, --change_pitch=&lt;arg&gt;       Change pitch of midi file. The argument is the pitch change. E.g: -c 2.
+  -t      , --test                     Test similarity of files after transformations.
+  -h        --help                     Print usage and exit.
+</code></pre>
+
+<p>A Qt GUI is provided in "miditransform-gui.pyw". It can also be compiled for Android using Kivy and Buildozer.</p>
+
+<h1>
+<a id="requires" class="anchor" href="#requires" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requires</h1>
+
+<ul>
+<li>
+<a href="http://www.python.org/download/">Python</a> (2.6 or 2.7)</li>
+<li>
+<a href="http://qt-project.org/wiki/PySide">PySide</a> For the Qt GUI version.</li>
+<li>
+<a href="http://pygame.org">PyGame</a> For the Qt GUI version.</li>
+<li>
+<a href="http://kivy.org">Kivy</a> For Android version.</li>
+</ul>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>Midi-Transform is released into the public domain by the copyright holders.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/CarlosManuelRodr/Midi-Transform/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/CarlosManuelRodr/Midi-Transform/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/CarlosManuelRodr/Midi-Transform"></a> is maintained by <a href="https://github.com/CarlosManuelRodr">CarlosManuelRodr</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
