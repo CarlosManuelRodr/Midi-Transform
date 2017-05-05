@@ -45,8 +45,8 @@ Showcase
 
 Examples of the files produced by the script.
 
-* [Inverse Brahms Symphony No. 3 in F major, Op. 90. Mov. I](https://www.youtube.com/watch?v=kfrJyiVtBUI)
-* [Reverse Chopin Ballade No. 1 in G minor, Op. 23](https://www.youtube.com/watch?v=fBDhxt-4A1Y)
+* [Inverse Brahms Symphony No. 3 in F major, Op. 90. Mov. I](https://www.youtube.com/watch?v=IyzKsCrA1ak)
+* [Reverse Chopin Ballade No. 1 in G minor, Op. 23](https://www.youtube.com/watch?v=j0EiAq5D0MI)
 
 
 Instructions
